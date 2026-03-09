@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人博客</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --text-color: #333;
+            --light-text: #777;
+            --bg-color: #f9f9f9;
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+        
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        
+        header p {
+            margin: 10px 0 0;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        nav {
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+        
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .intro {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+        
+        .intro h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        
+        .posts {
+            margin-top: 30px;
+        }
+        
+        .posts h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        
+        .post {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        
+        .post h3 {
+            color: var(--text-color);
+            margin-top: 0;
+            font-size: 1.4em;
+        }
+        
+        .post-date {
+            color: var(--light-text);
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        
+        .post-content {
+            margin-bottom: 15px;
+        }
+        
+        .read-more {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+        
+        .read-more:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            color: var(--light-text);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            header {
+                padding: 30px 0;
+            }
+            
+            header h1 {
+                font-size: 2em;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .intro,
+            .post {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>我的个人博客</h1>
+            <p>记录生活和学习的点滴</p>
+        </header>
+        
+        <nav>
+            <ul>
+                <li><a href="#">首页</a></li>
+                <li><a href="#">关于我</a></li>
+                <li><a href="#">博客</a></li>
+                <li><a href="#">联系方式</a></li>
+            </ul>
+        </nav>
+        
+        <div class="intro">
+            <h2>关于我</h2>
+            <p>欢迎来到我的个人博客！这里是我分享知识、记录生活的地方。我热爱学习新技术，探索新领域，希望通过这个博客与大家交流分享。</p>
+            <p>我主要关注的领域包括：</p>
+            <ul>
+                <li>编程与开发</li>
+                <li>技术学习与分享</li>
+                <li>生活感悟与思考</li>
+            </ul>
+        </div>
+        
+        <div class="posts">
+            <h2>最新文章</h2>
+            
+            <div class="post">
+                <h3>Git 学习笔记</h3>
+                <p class="post-date">2026-03-09</p>
+                <div class="post-content">
+                    <p>记录 Git 的基本使用方法和常用命令，帮助自己更好地管理代码版本。包括初始化仓库、提交代码、分支管理等核心功能的使用技巧。</p>
+                </div>
+                <a href="#" class="read-more">阅读更多</a>
+            </div>
+            
+            <div class="post">
+                <h3>Python 学习规划</h3>
+                <p class="post-date">2026-03-08</p>
+                <div class="post-content">
+                    <p>制定长期的 Python 学习计划，包括基础语法、数据分析、Web 开发等方向。分享学习资源和实践经验，帮助自己和他人更好地掌握这门强大的编程语言。</p>
+                </div>
+                <a href="#" class="read-more">阅读更多</a>
+            </div>
+            
+            <div class="post">
+                <h3>前端开发学习心得</h3>
+                <p class="post-date">2026-03-07</p>
+                <div class="post-content">
+                    <p>分享前端开发的学习心得，包括 HTML、CSS、JavaScript 等核心技术的学习方法和实践经验。探讨现代前端框架和工具的使用技巧。</p>
+                </div>
+                <a href="#" class="read-more">阅读更多</a>
+            </div>
+        </div>
+        
+        <footer>
+            <p>&copy; 2026 我的个人博客. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
