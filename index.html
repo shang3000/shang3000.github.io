@@ -4,16 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>个人博客</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #3498db;
-            --secondary-color: #2ecc71;
+            --primary-color: #ff6b35;
+            --secondary-color: #e53935;
+            --accent-color: #ff9800;
             --text-color: #333;
-            --light-text: #777;
-            --bg-color: #f9f9f9;
-            --card-bg: #ffffff;
-            --border-color: #e0e0e0;
-            --shadow: 0 2px 10px rgba(0,0,0,0.1);
+            --light-text: #666;
+            --bg-color: #fff3e0;
+            --card-bg: rgba(255, 255, 255, 0.55);
+            --border-color: rgba(255, 112, 67, 0.5);
+            --shadow: 0 4px 20px rgba(255, 107, 53, 0.25);
         }
         
         * {
@@ -21,238 +23,494 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 0;
             background-color: var(--bg-color);
             color: var(--text-color);
+            background-image: 
+                linear-gradient(rgba(255, 107, 53, 0.12), rgba(229, 57, 53, 0.12));
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('images/background.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            opacity: 0.85;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 20px;
         }
         
-        header {
-            text-align: center;
-            padding: 40px 0;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            border-radius: 10px;
+        .nav-bar {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 15px 30px;
             margin-bottom: 30px;
             box-shadow: var(--shadow);
-        }
-        
-        header h1 {
-            margin: 0;
-            font-size: 2.5em;
-            font-weight: 700;
-        }
-        
-        header p {
-            margin: 10px 0 0;
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-        
-        nav {
-            background-color: var(--card-bg);
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            margin-bottom: 30px;
-        }
-        
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+            border: 1px solid var(--border-color);
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
         
-        nav ul li a {
+        .nav-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
             text-decoration: none;
-            color: var(--text-color);
-            font-weight: 500;
-            padding: 8px 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.5);
+        }
+        
+        .nav-btn.active {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+        }
+        
+        header {
+            text-align: center;
+            padding: 50px 30px;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.9), rgba(229, 57, 53, 0.9)), 
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="3" fill="rgba(255,255,255,0.3)"/><circle cx="80" cy="30" r="2" fill="rgba(255,255,255,0.4)"/><circle cx="40" cy="70" r="2.5" fill="rgba(255,255,255,0.3)"/><circle cx="90" cy="80" r="1.5" fill="rgba(255,255,255,0.5)"/></svg>');
+            background-size: cover;
+            color: white;
+            border-radius: 25px;
+            margin-bottom: 35px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--border-color);
+        }
+        
+        header::before {
+            content: '✧';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 30px;
+            animation: sparkle 2s infinite;
+        }
+        
+        header::after {
+            content: '✦';
+            position: absolute;
+            top: 30px;
+            right: 25px;
+            font-size: 25px;
+            animation: sparkle 2.5s infinite 0.5s;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        .blog-title {
+            font-size: 2.8em;
+            font-weight: 700;
+            margin: 0;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .blog-subtitle {
+            font-size: 1.3em;
+            margin: 15px 0 0;
+            opacity: 0.95;
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
             border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
             transition: all 0.3s ease;
         }
         
-        nav ul li a:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .intro {
-            background-color: var(--card-bg);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            margin-bottom: 30px;
-        }
-        
-        .intro h2 {
-            color: var(--primary-color);
-            margin-top: 0;
-        }
-        
-        .posts {
-            margin-top: 30px;
-        }
-        
-        .posts h2 {
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
-        }
-        
-        .post {
-            background-color: var(--card-bg);
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            margin-bottom: 20px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .post:hover {
+        .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 30px rgba(255, 107, 53, 0.4);
         }
         
-        .post h3 {
-            color: var(--text-color);
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+        }
+        
+        .section-title {
+            color: var(--secondary-color);
+            font-size: 2em;
             margin-top: 0;
-            font-size: 1.4em;
+            margin-bottom: 25px;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            margin: 12px auto 0;
+            border-radius: 2px;
+        }
+        
+        .about-content {
+            font-size: 1.1em;
+            line-height: 1.9;
+        }
+        
+        .about-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        
+        .about-content li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .about-content li::before {
+            content: '♥';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-size: 1.2em;
+        }
+        
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+        
+        .post-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .post-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(255, 107, 53, 0.45);
+        }
+        
+        .post-card::before {
+            content: '✧';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            color: var(--primary-color);
+            opacity: 0.6;
+        }
+        
+        .post-title {
+            color: var(--secondary-color);
+            font-size: 1.5em;
+            margin-top: 0;
+            margin-bottom: 12px;
         }
         
         .post-date {
             color: var(--light-text);
-            font-size: 0.9em;
+            font-size: 0.95em;
             margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
-        .post-content {
-            margin-bottom: 15px;
+        .post-date i {
+            color: var(--primary-color);
         }
         
-        .read-more {
+        .post-excerpt {
+            color: var(--text-color);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        .read-more-btn {
             display: inline-block;
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
             text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            transition: background-color 0.3s ease;
+            padding: 10px 22px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
         }
         
-        .read-more:hover {
-            background-color: var(--secondary-color);
+        .read-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
         }
         
         footer {
-            text-align: center;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
             margin-top: 40px;
-            padding: 20px;
-            background-color: var(--card-bg);
-            border-radius: 10px;
             box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+        
+        .footer-text {
             color: var(--light-text);
+            font-size: 1.05em;
+            margin: 0;
+        }
+        
+        .social-icons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+        }
+        
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-decoration: none;
+            font-size: 1.3em;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            transform: translateY(-4px) scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.5);
+        }
+        
+        .decoration {
+            position: fixed;
+            font-size: 40px;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .star1 { top: 15%; left: 5%; animation: float 4s infinite ease-in-out; }
+        .star2 { top: 70%; right: 8%; animation: float 5s infinite ease-in-out 1s; }
+        .star3 { bottom: 10%; left: 10%; animation: float 4.5s infinite ease-in-out 0.5s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
         }
         
         @media (max-width: 768px) {
             .container {
-                padding: 10px;
+                padding: 15px;
             }
             
-            header {
-                padding: 30px 0;
+            .blog-title {
+                font-size: 2.2em;
             }
             
-            header h1 {
-                font-size: 2em;
+            .blog-subtitle {
+                font-size: 1.1em;
             }
             
-            nav ul {
-                flex-direction: column;
-                align-items: center;
-                gap: 10px;
+            .nav-bar {
+                padding: 12px 15px;
             }
             
-            .intro,
-            .post {
+            .nav-btn {
+                padding: 10px 18px;
+                font-size: 14px;
+            }
+            
+            .card, .post-card {
                 padding: 20px;
             }
+            
+            .section-title {
+                font-size: 1.6em;
+            }
+            
+            .posts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--primary-color), var(--secondary-color));
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(var(--secondary-color), var(--primary-color));
         }
     </style>
 </head>
 <body>
+    <div class="decoration star1">✧</div>
+    <div class="decoration star2">✦</div>
+    <div class="decoration star3">✧</div>
+    
     <div class="container">
         <header>
-            <h1>我的个人博客</h1>
-            <p>记录生活和学习的点滴</p>
+            <h1 class="blog-title">🍵 不如吃茶去的个人博客 🍵</h1>
+            <p class="blog-subtitle">编程爱好者的个人展示空间 🎮</p>
         </header>
         
-        <nav>
-            <ul>
-                <li><a href="#">首页</a></li>
-                <li><a href="#">关于我</a></li>
-                <li><a href="#">博客</a></li>
-                <li><a href="#">联系方式</a></li>
-            </ul>
-        </nav>
-        
-        <div class="intro">
-            <h2>关于我</h2>
-            <p>欢迎来到我的个人博客！这里是我分享知识、记录生活的地方。我热爱学习新技术，探索新领域，希望通过这个博客与大家交流分享。</p>
-            <p>我主要关注的领域包括：</p>
-            <ul>
-                <li>编程与开发</li>
-                <li>技术学习与分享</li>
-                <li>生活感悟与思考</li>
-            </ul>
+        <div class="nav-bar">
+            <a href="#" class="nav-btn active"><i class="fas fa-home"></i> 首页</a>
+            <a href="#" class="nav-btn"><i class="fas fa-user"></i> 关于我</a>
+            <a href="#" class="nav-btn"><i class="fas fa-book"></i> 博客/文章</a>
+            <a href="#" class="nav-btn"><i class="fas fa-code"></i> 项目</a>
+            <a href="#" class="nav-btn"><i class="fas fa-address-book"></i> 联系</a>
         </div>
         
-        <div class="posts">
-            <h2>最新文章</h2>
-            
-            <div class="post">
-                <h3>Git 学习笔记</h3>
-                <p class="post-date">2026-03-09</p>
-                <div class="post-content">
-                    <p>记录 Git 的基本使用方法和常用命令，帮助自己更好地管理代码版本。包括初始化仓库、提交代码、分支管理等核心功能的使用技巧。</p>
-                </div>
-                <a href="#" class="read-more">阅读更多</a>
+        <div class="card">
+            <h2 class="section-title">关于我 👋</h2>
+            <div class="about-content">
+                <p>欢迎来到我的个人博客！我是<span style="font-weight: bold; color: var(--primary-color); font-size: 1.2em;">不如吃茶去</span>，一名热爱编程的编程爱好者，喜欢探索各种新技术，特别是 Python！</p>
+                <p>我的兴趣爱好：</p>
+                <ul>
+                    <li>💻 编程开发 - 喜欢用代码创造有趣的东西</li>
+                    <li>🎮 游戏开发 - 用 Pygame 做小游戏</li>
+                    <li>📚 技术学习 - 不断学习新的知识和技能</li>
+                    <li>🎨 创意设计 - 喜欢把想法变成现实</li>
+                </ul>
+                <p>希望通过这个博客展示我的项目和学习历程，和大家一起交流进步！</p>
             </div>
-            
-            <div class="post">
-                <h3>Python 学习规划</h3>
-                <p class="post-date">2026-03-08</p>
-                <div class="post-content">
-                    <p>制定长期的 Python 学习计划，包括基础语法、数据分析、Web 开发等方向。分享学习资源和实践经验，帮助自己和他人更好地掌握这门强大的编程语言。</p>
+        </div>
+        
+        <div class="card">
+            <h2 class="section-title">学习笔记 📚</h2>
+            <div class="posts-grid">
+                <div class="post-card">
+                    <h3 class="post-title">🐍 Python 基础</h3>
+                    <p class="post-date"><i class="far fa-calendar-alt"></i> 持续更新</p>
+                    <p class="post-excerpt">Python 基础语法、数据类型、列表、字典、函数、面向对象编程等基础知识笔记！</p>
+                    <a href="#" class="read-more-btn">查看笔记 📖</a>
                 </div>
-                <a href="#" class="read-more">阅读更多</a>
+                
+                <div class="post-card">
+                    <h3 class="post-title">� Git & GitHub</h3>
+                    <p class="post-date"><i class="far fa-calendar-alt"></i> 版本控制</p>
+                    <p class="post-excerpt">Git 的基本使用方法、分支管理、GitHub 各种骚操作等版本控制相关笔记！</p>
+                    <a href="#" class="read-more-btn">查看教程 🛠️</a>
+                </div>
+                
+                <div class="post-card">
+                    <h3 class="post-title">📊 数据可视化</h3>
+                    <p class="post-date"><i class="far fa-calendar-alt"></i> 学习中</p>
+                    <p class="post-excerpt">NumPy、Pandas、Matplotlib、Seaborn 等数据可视化库的学习笔记！</p>
+                    <a href="#" class="read-more-btn">学习中 📈</a>
+                </div>
             </div>
-            
-            <div class="post">
-                <h3>前端开发学习心得</h3>
-                <p class="post-date">2026-03-07</p>
-                <div class="post-content">
-                    <p>分享前端开发的学习心得，包括 HTML、CSS、JavaScript 等核心技术的学习方法和实践经验。探讨现代前端框架和工具的使用技巧。</p>
+        </div>
+        
+        <div class="card">
+            <h2 class="section-title">我的项目 🎮</h2>
+            <div class="posts-grid">
+                <div class="post-card">
+                    <h3 class="post-title">� 贪吃蛇游戏</h3>
+                    <p class="post-date"><i class="fas fa-gamepad"></i> Pygame 项目</p>
+                    <p class="post-excerpt">用面向对象思想写的经典贪吃蛇小游戏，巩固 Python 面向对象编程知识！</p>
+                    <a href="#" class="read-more-btn">查看项目 �</a>
                 </div>
-                <a href="#" class="read-more">阅读更多</a>
+                
+                <div class="post-card">
+                    <h3 class="post-title">🥒 牛逼的黄瓜</h3>
+                    <p class="post-date"><i class="fas fa-gamepad"></i> Pygame 项目</p>
+                    <p class="post-excerpt">Flappy Bird 风格的小游戏，主角是一根牛逼的黄瓜！用 Pygame 开发！</p>
+                    <a href="#" class="read-more-btn">查看项目 🎮</a>
+                </div>
+                
+                <div class="post-card">
+                    <h3 class="post-title">💬 聊天室</h3>
+                    <p class="post-date"><i class="fas fa-comments"></i> Socket 编程</p>
+                    <p class="post-excerpt">用 Python 的 socket 模块开发的聊天室，包含客户端和服务端，支持多人聊天！</p>
+                    <a href="#" class="read-more-btn">查看项目 👀</a>
+                </div>
             </div>
         </div>
         
         <footer>
-            <p>&copy; 2026 我的个人博客. All rights reserved.</p>
+            <p class="footer-text">🍵 不如吃茶去的个人博客 © 2026</p>
+            <div class="social-icons">
+                <a href="https://github.com/shang3000" target="_blank" class="social-icon"><i class="fab fa-github"></i></a>
+                <a href="https://x.com/Man69511815287" target="_blank" class="social-icon" style="font-weight: bold; font-size: 1.5em;">X</a>
+                <a href="https://space.bilibili.com/286078295?spm_id_from=333.1007.0.0" target="_blank" class="social-icon"><i class="fab fa-bilibili"></i></a>
+                <a href="https://www.youtube.com/@Man-q8j3y" target="_blank" class="social-icon"><i class="fab fa-youtube"></i></a>
+            </div>
         </footer>
     </div>
 </body>
