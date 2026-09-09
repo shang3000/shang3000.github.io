@@ -261,12 +261,16 @@ button { color: inherit; font: inherit; }
 }
 .subject-lock i { width: 20px; height: 20px; border-top: 2px solid; border-left: 2px solid; }
 .subject-lock i:last-child { transform: rotate(180deg); }
+.subject-lock,
+.report-meta,
+.hero-folio { pointer-events: none; }   /* 纯装饰，不挡原子拖拽 */
 
 .hero-title {
     position: absolute;
     left: 40px;
     right: 40px;
     bottom: 250px;
+    pointer-events: none;           /* 不拦截下层原子的拖拽 */
     margin: 0;
     font-family: var(--display);
     font-style: italic;
@@ -780,4 +784,45 @@ button { color: inherit; font: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
     .hero-face { animation: none; }
+}
+
+/* ===== 原子结构动画 v3：容器=小球自身大小，命中即拖拽（轻量流畅） ===== */
+.atom-field {
+    position: absolute;
+    left: 53%;
+    top: 30%;
+    width: clamp(240px, 42vh, 400px);
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
+    z-index: 0;                 /* 视觉垫在文字后面 */
+    cursor: grab;
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.atom-field canvas { display: block; width: 100%; height: 100%; }
+.atom-tag {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--red);
+    background: var(--paper);
+    border-left: 3px solid var(--red);
+    padding: 3px 7px 3px 6px;
+    line-height: 1.2;
+    pointer-events: none;
+}
+@media (max-width: 760px) {
+    .atom-tag { display: none; }
+}
+.atom-field.dragging { cursor: grabbing; }
+
+@media (max-width: 760px) {
+    .atom-field { left: 50%; top: 152px; width: min(200px, 44vw); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .atom-field { cursor: default; }
 }
