@@ -1,7 +1,7 @@
 "use strict";
 
 /*
- * 不如吃茶去 · 博客交互脚本
+ * 不如吃茶去 · 博客交互脚本（编辑部风格版）
  */
 
 (function () {
@@ -9,8 +9,10 @@
     const navLinks = document.querySelectorAll('.nav-btn');
     const sections = document.querySelectorAll('section[id]');
     const backToTop = document.querySelector('.back-to-top');
+    const notice = document.querySelector('.site-notice');
+    const noticeClose = document.querySelector('.notice-close');
 
-    // 导航点击高亮
+    // 导航点击平滑滚动
     navLinks.forEach((link) => {
         link.addEventListener('click', function (e) {
             const targetId = this.getAttribute('href').slice(1);
@@ -22,11 +24,18 @@
         });
     });
 
+    // 关闭公告带（裁切收起动画）
+    if (notice && noticeClose) {
+        noticeClose.addEventListener('click', function () {
+            notice.classList.add('is-leaving');
+            notice.addEventListener('animationend', () => notice.remove(), { once: true });
+        });
+    }
+
     // 滚动时更新导航高亮 + 返回顶部
     function onScroll() {
         const scrollY = window.scrollY;
 
-        // 高亮当前 section
         let current = '';
         sections.forEach((section) => {
             const sectionTop = section.offsetTop - 120;
@@ -37,22 +46,19 @@
 
         navLinks.forEach((link) => {
             link.classList.remove('active');
+            link.removeAttribute('aria-current');
             if (link.getAttribute('href') === '#' + current) {
                 link.classList.add('active');
+                link.setAttribute('aria-current', 'page');
             }
         });
 
-        // 返回顶部按钮显隐
         if (backToTop) {
-            if (scrollY > 500) {
-                backToTop.classList.add('show');
-            } else {
-                backToTop.classList.remove('show');
-            }
+            backToTop.classList.toggle('show', scrollY > 500);
         }
     }
 
-    window.addEventListener('scroll', onScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
 
     if (backToTop) {
         backToTop.addEventListener('click', () => {
@@ -72,7 +78,7 @@
                     }
                 });
             },
-            { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+            { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
         );
         revealElements.forEach((el) => observer.observe(el));
     } else {
