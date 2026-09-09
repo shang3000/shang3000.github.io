@@ -741,3 +741,43 @@ button { color: inherit; font: inherit; }
     .band-in { clip-path: none; }
     .reveal-load { opacity: 1; transform: none; }
 }
+
+/* ===== 互动小脸（红填充圆脸 + 并排长条胶囊眼，底部被红色带截断） ===== */
+.hero-face {
+    position: absolute;
+    right: 10.5%;
+    bottom: 178px;              /* 圆的下沿压进红色带约50px，只露上面大半 */
+    width: clamp(230px, 24vw, 320px);
+    z-index: 0;                 /* 压在红色带下面 */
+    cursor: pointer;
+    animation: face-float 6s ease-in-out infinite;
+}
+@keyframes face-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+.face-svg { display: block; width: 100%; height: auto; overflow: visible; }
+.hero-face:active .face-svg { transform: scale(0.98); transition: transform 0.15s ease; }
+
+.face-head { fill: var(--red); }
+.eye-shape { fill: var(--paper); }
+
+/* 眼睛：整只胶囊小幅平移跟随鼠标；眨眼=压扁成一条线 */
+.eye {
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: translate(var(--ex, 0px), var(--ey, 0px));
+}
+.eye.blink { animation: eye-blink 0.18s ease both; }
+@keyframes eye-blink {
+    0%, 100% { transform: translate(var(--ex, 0px), var(--ey, 0px)) scaleY(1); }
+    50% { transform: translate(var(--ex, 0px), var(--ey, 0px)) scaleY(0.06); }
+}
+
+@media (max-width: 760px) {
+    .hero-face { right: 14px; top: 18px; bottom: auto; width: 130px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-face { animation: none; }
+}

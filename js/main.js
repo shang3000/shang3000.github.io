@@ -84,4 +84,53 @@
     } else {
         revealElements.forEach((el) => el.classList.add('visible'));
     }
+
+    // ===== 互动小脸：空心眼睛跟随鼠标 + 自动眨眼 =====
+    const face = document.getElementById('heroFace');
+    if (face) {
+        const eyes = face.querySelectorAll('.eye');
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        let targetX = 0, targetY = 0, curX = 0, curY = 0;
+
+        if (!reduceMotion) {
+            document.addEventListener('mousemove', (e) => {
+                const r = face.getBoundingClientRect();
+                const dx = e.clientX - (r.left + r.width / 2);
+                const dy = e.clientY - (r.top + r.height / 2);
+                const dist = Math.hypot(dx, dy) || 1;
+                const k = Math.min(dist / 300, 1);
+                const ang = Math.atan2(dy, dx);
+                targetX = Math.cos(ang) * 9 * k;
+                targetY = Math.sin(ang) * 9 * k;
+            });
+
+            (function follow() {
+                curX += (targetX - curX) * 0.1;
+                curY += (targetY - curY) * 0.1;
+                eyes.forEach((eye) => {
+                    eye.style.setProperty('--ex', curX.toFixed(2) + 'px');
+                    eye.style.setProperty('--ey', curY.toFixed(2) + 'px');
+                });
+                requestAnimationFrame(follow);
+            })();
+        }
+
+        function blink() {
+            eyes.forEach((el) => el.classList.add('blink'));
+            setTimeout(() => eyes.forEach((el) => el.classList.remove('blink')), 200);
+        }
+        (function blinkLoop() {
+            setTimeout(() => { blink(); blinkLoop(); }, 2400 + Math.random() * 3200);
+        })();
+
+        // 点它一下：连眨两下
+        let winkTimer = null;
+        face.addEventListener('click', () => {
+            blink();
+            clearTimeout(winkTimer);
+            winkTimer = setTimeout(blink, 260);
+        });
+    }
+
 })();
