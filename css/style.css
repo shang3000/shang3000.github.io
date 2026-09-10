@@ -79,7 +79,6 @@ button { color: inherit; font: inherit; }
     display: flex;
     align-items: stretch;
     justify-content: space-between;
-    border-bottom: 1px solid var(--line);
     background: rgba(253, 245, 224, 0.96);
 }
 .nav-brand {
@@ -87,7 +86,6 @@ button { color: inherit; font: inherit; }
     align-items: center;
     gap: 13px;
     padding: 0 48px;
-    border-right: 1px solid var(--line);
     font-size: 14px;
     font-weight: 800;
     letter-spacing: 0.03em;
@@ -108,31 +106,84 @@ button { color: inherit; font: inherit; }
     letter-spacing: 0.16em;
     color: var(--muted);
 }
-.site-nav nav { display: flex; margin-left: auto; }
-.site-nav nav a {
-    min-width: 112px;
-    padding: 13px 18px 10px;
+/* 右侧：赛博朋克式独立悬浮菜单条（纸面同色底 + CP 标志性切角，参考 cyberpunk.net/edgerunners） */
+.site-nav nav {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 3px;
-    border-left: 1px solid var(--line);
+    align-items: stretch;
+    align-self: center;
+    height: 48px;
+    margin: 0 22px 0 auto;      /* 与右侧边缘留空隙，悬浮感 */
+    background: var(--paper);   /* 与页面主体同色，避免两 种黄打架 */
+    box-shadow: 0 0 0 1px rgba(61, 43, 36, 0.35);
+    clip-path: polygon(14px 0, calc(100% - 14px) 0, 100% 14px,
+                       100% calc(100% - 14px), calc(100% - 14px) 100%,
+                       0 100%, 0 14px);   /* 左上/右上/右下削角，左下保留直角 */
+}
+.site-nav nav a {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 20px;
+    border-left: 1px solid rgba(61, 43, 36, 0.18);
+    color: var(--ink);
     transition: background 0.2s ease, color 0.2s ease;
 }
+.site-nav nav a:first-child { border-left: none; }
+.site-nav nav a b { font-size: 13px; }
 .site-nav nav a span {
     font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 0.12em;
+    font-size: 8px;
+    letter-spacing: 0.14em;
     color: var(--muted);
 }
-.site-nav nav a b { font-size: 13px; }
+/* 下拉小箭头（装饰，贴合参考站造型） */
+.nav-caret {
+    flex: none;
+    width: 0;
+    height: 0;
+    border-left: 3.5px solid transparent;
+    border-right: 3.5px solid transparent;
+    border-top: 4.5px solid rgba(61, 43, 36, 0.5);
+    transition: border-top-color 0.2s ease;
+}
 .site-nav nav a:hover,
 .site-nav nav a.active {
-    background: var(--ink);
+    background: var(--red);
     color: #fff;
 }
 .site-nav nav a:hover span,
-.site-nav nav a.active span { color: rgba(255, 255, 255, 0.55); }
+.site-nav nav a.active span { color: rgba(255, 255, 255, 0.6); }
+.site-nav nav a:hover .nav-caret,
+.site-nav nav a.active .nav-caret { border-top-color: #fff; }
+
+/* 末尾：中 / EN 语言切换（参考 CP 官网的 EN 按钮） */
+.nav-lang {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0 22px;
+    border: none;
+    border-left: 2px solid var(--red);
+    background: transparent;
+    color: rgba(61, 43, 36, 0.45);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+.nav-lang i { font-style: normal; opacity: 0.5; }
+.nav-lang b { font-weight: 400; padding-bottom: 2px; transition: color 0.2s ease, box-shadow 0.2s ease; }
+.nav-lang b.on { color: var(--red); box-shadow: inset 0 -2px 0 var(--red); }
+.nav-lang:hover { background: var(--red); }
+.nav-lang:hover b { color: rgba(255, 255, 255, 0.75); }
+.nav-lang:hover b.on { color: #fff; }
+.nav-lang:hover i { opacity: 0.8; }
+
+/* 英文模式下：导航不再重复显示英文小字；hero 大字缩一档防溢出 */
+html[lang="en"] .site-nav nav a span { display: none; }
+html[lang="en"] .hero-title span { font-size: clamp(56px, 9.5vw, 170px); }
+html[lang="en"] .hero-title span + span { font-size: clamp(44px, 7vw, 130px); }
 
 /* ===== 通栏公告带 ===== */
 .site-notice {
@@ -202,11 +253,11 @@ button { color: inherit; font: inherit; }
 /* ===== 动效语法 ===== */
 .reveal-load { animation: drop-in 0.7s var(--ease-out) both; animation-delay: 0.1s; }
 .reveal {
-    clip-path: inset(0 0 100% 0);
+    opacity: 0;
     transform: translateY(26px);
-    transition: clip-path 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+    transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
 }
-.reveal.visible { clip-path: inset(-10% -2%); transform: translateY(0); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
 .band-in {
     clip-path: inset(0 100% 0 0);
     animation: band-in 0.85s var(--ease-snap) 0.24s forwards;
@@ -426,6 +477,12 @@ button { color: inherit; font: inherit; }
     color: var(--ink);
 }
 
+.about-para {
+    margin-top: 16px;
+    line-height: 1.9;
+    color: var(--ink);
+}
+
 /* 方向卡：细线分格，悬停反白 */
 .direction-grid {
     display: grid;
@@ -444,7 +501,7 @@ button { color: inherit; font: inherit; }
     overflow: hidden;
     transition: background 0.25s ease, color 0.25s ease;
 }
-.direction-card:hover { background: var(--ink); color: #fff; }
+.direction-card:hover { background: var(--red); color: #fff; }
 .direction-index {
     font-family: var(--mono);
     font-size: 11px;
@@ -489,7 +546,7 @@ button { color: inherit; font: inherit; }
     overflow: hidden;
     transition: background 0.25s ease, color 0.25s ease;
 }
-.post-card:hover { background: var(--ink); color: #fff; }
+.post-card:hover { background: var(--red); color: #fff; }
 .post-index {
     font-family: var(--mono);
     font-size: 11px;
@@ -545,7 +602,7 @@ button { color: inherit; font: inherit; }
     display: grid;
     grid-template-columns: 1.5fr 1fr;
     gap: 60px;
-    background: var(--ink);
+    background: var(--red);
     color: #fff;
 }
 .method-band span {
@@ -563,7 +620,7 @@ button { color: inherit; font: inherit; }
     font-style: italic;
     line-height: 1.12;
 }
-.method-band strong span { color: var(--red); }
+.method-band strong span { color: var(--paper); }
 .method-band p {
     margin: 0;
     align-self: end;
@@ -671,11 +728,14 @@ button { color: inherit; font: inherit; }
         border-right: 0;
         border-bottom: 1px solid var(--line);
     }
-    .site-nav nav { width: 100%; overflow-x: auto; scrollbar-width: none; }
+    .site-nav nav { width: calc(100% - 16px); margin: 0 8px 10px auto; height: 44px; overflow-x: auto; scrollbar-width: none;
+        clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); }
     .site-nav nav::-webkit-scrollbar { display: none; }
-    .site-nav nav a { min-width: 64px; flex: 1 0 64px; padding: 9px 4px; }
+    .site-nav nav a { min-width: 64px; flex: 1 0 64px; padding: 9px 4px; justify-content: center; }
     .site-nav nav a span { font-size: 6px; }
     .site-nav nav a b { font-size: 11px; }
+    .nav-caret { display: none; }              /* 小屏收起装饰箭头 */
+    .nav-lang { padding: 0 14px; flex: none; }
 
     .site-notice {
         min-height: 92px;
@@ -741,7 +801,7 @@ button { color: inherit; font: inherit; }
         animation-duration: 0.01ms !important;
         transition-duration: 0.01ms !important;
     }
-    .reveal { clip-path: none; transform: none; }
+    .reveal { opacity: 1; clip-path: none; transform: none; }
     .band-in { clip-path: none; }
     .reveal-load { opacity: 1; transform: none; }
 }
@@ -826,3 +886,87 @@ button { color: inherit; font: inherit; }
 @media (prefers-reduced-motion: reduce) {
     .atom-field { cursor: default; }
 }
+
+/* ===== 关于我：CP 式内部分类导航（描边分格 + 激活反白 + 右端斜切，参考 edgerunners） ===== */
+.about-tabs {
+    margin-top: 44px;
+    display: inline-flex;
+    max-width: 100%;
+    background: var(--ink);                       /* 外层墨色 = 描边色 */
+    clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 100%, 0 100%);   /* 右端斜切 */
+}
+.about-tabs-inner {
+    display: flex;
+    margin: 1px;                                  /* 露出外层 1px 形成描边 */
+    background: var(--paper);
+    clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 100%, 0 100%);
+}
+.about-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 28px;
+    border: none;
+    border-left: 1px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease;
+}
+.about-tab:first-child { border-left: none; }
+.about-tab b { font-size: 13px; font-weight: 700; }
+.about-tab span {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    transition: color 0.18s ease;
+}
+.about-tab:hover { background: rgba(212, 70, 54, 0.08); }
+.about-tab.active { background: var(--red); color: #fff; }
+.about-tab.active span { color: rgba(255, 255, 255, 0.6); }
+
+/* 空占位面板 */
+.about-tab-panel {
+    margin-top: 20px;
+    border: 1px dashed rgba(61, 43, 36, 0.35);
+    padding: 38px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+.panel-mark {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--red);
+}
+.panel-hint { font-size: 12px; color: var(--muted); }
+
+@media (max-width: 760px) {
+    .about-tabs { width: 100%; }
+    .about-tab { flex: 1; justify-content: center; padding: 0 10px; height: 42px; }
+    .about-tab span { display: none; }
+}
+
+/* ===== 关于我：CP 式居中布局（标题居中 → tab 条居中 → 面板） ===== */
+#about .section-head {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 6px;
+    padding-top: 6px;
+}
+#about .section-head p { text-align: center; }
+.about-tabs {
+    display: flex;
+    width: max-content;
+    max-width: 100%;
+    margin: 36px auto 0;      /* 居中，紧跟标题下方 */
+}
+.tab-panes { margin-top: 22px; }
+.tab-pane[hidden] { display: none; }

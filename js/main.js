@@ -99,15 +99,15 @@
                 const dx = e.clientX - (r.left + r.width / 2);
                 const dy = e.clientY - (r.top + r.height / 2);
                 const dist = Math.hypot(dx, dy) || 1;
-                const k = Math.min(dist / 300, 1);
+                const k = Math.min(dist / 600, 1);
                 const ang = Math.atan2(dy, dx);
-                targetX = Math.cos(ang) * 9 * k;
-                targetY = Math.sin(ang) * 9 * k;
+                targetX = Math.cos(ang) * 20 * k;
+                targetY = Math.sin(ang) * 20 * k;
             });
 
             (function follow() {
-                curX += (targetX - curX) * 0.1;
-                curY += (targetY - curY) * 0.1;
+                curX += (targetX - curX) * 0.18;
+                curY += (targetY - curY) * 0.18;
                 eyes.forEach((eye) => {
                     eye.style.setProperty('--ex', curX.toFixed(2) + 'px');
                     eye.style.setProperty('--ey', curY.toFixed(2) + 'px');
@@ -371,4 +371,52 @@
         }
     }
 
+})();
+
+/* ===== 中 / EN 语言切换（data-en 驱动，独立模块） ===== */
+(function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('langToggle');
+    if (!btn) return;
+    var zhB = btn.querySelector('.lang-zh');
+    var enB = btn.querySelector('.lang-en');
+    var nodes = Array.prototype.slice.call(document.querySelectorAll('[data-en]'));
+
+    function apply(lang) {
+        nodes.forEach(function (el) {
+            if (lang === 'en') {
+                if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+                el.innerHTML = el.getAttribute('data-en');
+            } else if (el.dataset.zh !== undefined) {
+                el.innerHTML = el.dataset.zh;
+            }
+        });
+        root.setAttribute('lang', lang === 'en' ? 'en' : 'zh-CN');
+        document.title = lang === 'en' ? 'Year One · Personal Blog' : '寰宇元年 · 个人博客';
+        zhB.classList.toggle('on', lang !== 'en');
+        enB.classList.toggle('on', lang === 'en');
+        try { localStorage.setItem('site-lang', lang); } catch (e) { /* 隐私模式下忽略 */ }
+    }
+
+    var saved = 'zh';
+    try { saved = localStorage.getItem('site-lang') || 'zh'; } catch (e) { /* ignore */ }
+    apply(saved === 'en' ? 'en' : 'zh');
+
+    btn.addEventListener('click', function () {
+        apply(root.getAttribute('lang') === 'en' ? 'zh' : 'en');
+    });
+})();
+
+/* ===== 关于我：分类导航切换（tab ↔ 面板联动） ===== */
+(function () {
+    const tabs = document.querySelectorAll('#aboutTabs .about-tab');
+    const panes = document.querySelectorAll('#aboutPanes .tab-pane');
+    if (!tabs.length || tabs.length !== panes.length) return;
+    tabs.forEach((tab, i) => {
+        tab.addEventListener('click', () => {
+            tabs.forEach((t) => t.classList.remove('active'));
+            tab.classList.add('active');
+            panes.forEach((p, j) => { p.hidden = j !== i; });
+        });
+    });
 })();
