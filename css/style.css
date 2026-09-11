@@ -156,6 +156,49 @@ button { color: inherit; font: inherit; }
 .site-nav nav a:hover .nav-caret,
 .site-nav nav a.active .nav-caret { border-top-color: #fff; }
 
+/* ===== 「关于我」下拉菜单：四个选项联动面板标签（动态/历程/时间线/装备） ===== */
+/* 注意：菜单是 header 的直接子元素而非 nav 的子元素——nav 的 clip-path 切角会裁掉所有后代；
+   位置由 JS 按按钮坐标设定（fixed），开合由 .open 类驱动 */
+.nav-drop { position: relative; display: flex; }
+.drop-menu {
+    position: fixed;
+    top: -200px;                    /* 未定位前藏在屏幕外 */
+    min-width: 148px;
+    background: var(--paper);
+    box-shadow: 0 0 0 1px rgba(61, 43, 36, 0.35);
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px,
+                       100% 100%, 12px 100%, 0 calc(100% - 12px));  /* 右上/左下削角，与主菜单条呼应 */
+    padding: 5px 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+    z-index: 90;
+}
+.drop-menu.open { opacity: 1; visibility: visible; transform: none; }
+.drop-item {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 9px 18px;
+    border-left: none;              /* 覆盖 nav a 的分隔线 */
+    color: var(--ink);
+    transition: background 0.15s ease, color 0.15s ease;
+}
+.drop-item b { font-size: 12px; }
+.drop-item span {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+}
+.drop-item:hover { background: var(--red); color: #fff; }
+.drop-item:hover span { color: rgba(255, 255, 255, 0.6); }
+/* 下拉打开时主按钮的小箭头翻转 */
+.nav-drop.open .nav-caret,
+.nav-drop:hover .nav-caret { transform: rotate(180deg); }
+.nav-caret { transition: border-top-color 0.2s ease, transform 0.2s ease; }
+
 /* 末尾：中 / EN 语言切换（参考 CP 官网的 EN 按钮） */
 .nav-lang {
     display: flex;

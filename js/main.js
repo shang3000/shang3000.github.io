@@ -409,14 +409,77 @@
 
 /* ===== 关于我：分类导航切换（tab ↔ 面板联动） ===== */
 (function () {
-    const tabs = document.querySelectorAll('#aboutTabs .about-tab');
-    const panes = document.querySelectorAll('#aboutPanes .tab-pane');
-    if (!tabs.length || tabs.length !== panes.length) return;
+    const tabs = document.querySelectorAll('.about-tab');
+    const panes = document.querySelectorAll('.tab-pane');
     tabs.forEach((tab, i) => {
         tab.addEventListener('click', () => {
             tabs.forEach((t) => t.classList.remove('active'));
             tab.classList.add('active');
             panes.forEach((p, j) => { p.hidden = j !== i; });
         });
+    });
+})();
+
+/* ===== 导航「关于我」下拉：定位在按钮下方（菜单挂 header，避开 nav 的 clip-path 裁切），选项联动面板标签 ===== */
+(function () {
+    const drop = document.getElementById('aboutDrop');
+    const menu = document.getElementById('aboutDropMenu');
+    if (!drop || !menu) return;
+    const btn = drop.querySelector('.nav-btn');
+    const caret = drop.querySelector('.nav-caret');
+    const tabs = document.querySelectorAll('.about-tab');
+    const panes = document.querySelectorAll('.tab-pane');
+    let hideTimer = null;
+
+    function place() {
+        const r = btn.getBoundingClientRect();
+        menu.style.top = (r.bottom + 6) + 'px';
+        const left = Math.min(r.left, window.innerWidth - menu.offsetWidth - 10);
+        menu.style.left = Math.max(10, left) + 'px';
+    }
+    function open() {
+        clearTimeout(hideTimer);
+        place();
+        menu.classList.add('open');
+        drop.classList.add('open');
+    }
+    function close(delay) {
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(() => {
+            menu.classList.remove('open');
+            drop.classList.remove('open');
+        }, delay || 0);
+    }
+
+    // 桌面：悬停按钮展开；移入菜单保持，移出延迟收起（桥接按钮与菜单间的 6px 空隙）
+    drop.addEventListener('mouseenter', () => open());
+    drop.addEventListener('mouseleave', () => close(160));
+    menu.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+    menu.addEventListener('mouseleave', () => close(160));
+
+    // 小箭头 / 触屏：点击开合（不触发跳转）
+    if (caret) {
+        caret.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            menu.classList.contains('open') ? close(0) : open();
+        });
+    }
+
+    // 点下拉项：切换到对应标签页 + 立即收起（锚点跳转交给默认行为）
+    menu.querySelectorAll('.drop-item').forEach((item) => {
+        item.addEventListener('click', () => {
+            const i = Number(item.dataset.tabIndex) || 0;
+            tabs.forEach((t, j) => t.classList.toggle('active', j === i));
+            panes.forEach((p, j) => { p.hidden = j !== i; });
+            close(0);
+        });
+    });
+
+    // 滚动/resize 时跟随按钮位置；点击其他地方收起
+    window.addEventListener('scroll', () => { if (menu.classList.contains('open')) place(); }, { passive: true });
+    window.addEventListener('resize', () => close(0));
+    document.addEventListener('click', (e) => {
+        if (!drop.contains(e.target) && !menu.contains(e.target)) close(0);
     });
 })();
